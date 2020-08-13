@@ -1,0 +1,84 @@
+import 'package:MiniPocket_flutter/activities/fragments/fragment_authentication.dart';
+import 'package:MiniPocket_flutter/activities/fragments/fragment_status.dart';
+import 'package:MiniPocket_flutter/activities/fragments/fragment_transfer.dart';
+import 'package:MiniPocket_flutter/constat.dart';
+import 'package:flutter/material.dart';
+
+class MainActivity extends StatefulWidget{
+  @override
+  State<StatefulWidget> createState() {
+    return _MainActivityState();
+  }
+
+}
+
+class _MainActivityState extends State<MainActivity>{
+  int currentSelection = 1;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: GRAY,
+      body: getBody(currentSelection),
+      bottomNavigationBar: buildBottomNavigationBar(),
+    );
+  }
+
+  Widget getBody(int index){
+    switch (index){
+      case 0:
+        return FragmentTransfer();
+      case 1:
+        return FragmentStatus();
+      case 2:
+        return FragmentAuthentication();
+      default:
+        return Text("tmp");
+    }
+  }
+
+  BottomNavigationBar buildBottomNavigationBar() {
+    return BottomNavigationBar(
+      onTap: (index){
+        setState(() {
+          currentSelection = index;
+        });
+      },
+      backgroundColor: GRAY,
+      currentIndex: currentSelection,
+      selectedIconTheme: IconThemeData(
+        color: WHITE,
+      ),
+      items: [
+        BottomNavigationBarItem(
+            icon: Image(
+              image: AssetImage("assets/icon_transfer.png"),
+              width: 25,
+              height: 25,
+              color: (currentSelection == 0) ? YELLOW : BLACK,
+            ),
+            title: Text("")
+        ),
+        BottomNavigationBarItem(
+            icon: Image(
+              image: AssetImage("assets/icon_status.png"),
+              width: 25,
+              height: 25,
+              color: (currentSelection == 1) ? YELLOW : BLACK,
+            ),
+            title: Text("")
+        ),
+        BottomNavigationBarItem(
+            icon: Image(
+              image: AssetImage("assets/icon_cloud.png"),
+              width: 25,
+              height: 25,
+              color: (currentSelection == 2) ? YELLOW : BLACK,
+            ),
+            title: Text("")
+        ),
+      ],
+
+    );
+  }
+
+}
