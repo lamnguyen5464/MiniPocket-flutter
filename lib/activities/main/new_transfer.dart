@@ -1,3 +1,4 @@
+import 'package:MiniPocket_flutter/components/toggle_button.dart';
 import 'package:MiniPocket_flutter/constat.dart';
 import 'package:MiniPocket_flutter/models/NonRepeatedDetail.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -21,12 +22,7 @@ class CustomTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-      decoration: BoxDecoration(
-          color: GRAY,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(color: BLACK, offset: Offset(0, 1), blurRadius: 0)
-          ]),
+      decoration: decorated3DBlack,
       child: child,
     );
   }
@@ -36,6 +32,7 @@ class _NewTranferState extends State<NewTransferActivity> {
   int currentSelection = 1;
   var isEarningMode = true;
   var tmpCheckBox = true;
+  int fragmentSelected = 0;
   NonRepeatedDetail nonRepeatedDetail =
       new NonRepeatedDetail();
 
@@ -48,6 +45,14 @@ class _NewTranferState extends State<NewTransferActivity> {
     });
   }
 
+  TextStyle textColoredStyle(){
+    return TextStyle(
+      fontFamily: 'chalkboard',
+      color: isEarningMode ? GREEN : RED,
+      fontSize: 15,
+    );
+  }
+
   void onClickAddButton() {
 //    print('New transaction: ');
 //    print(nonRepeatedDetail.value);
@@ -58,12 +63,12 @@ class _NewTranferState extends State<NewTransferActivity> {
   }
 
   Widget getSubFragment(bool isRepeated) {
-    if (isRepeated == true) {
-      return Expanded(
-//        padding: const EdgeInsets.all(20),
+    if (isRepeated == false) {
+      return Padding(
+        padding: const EdgeInsets.all(20),
         child: Container(
           height: 100,
-          decoration: decoratedBox(),
+          decoration: decorated3DBlack,
           child: CupertinoTheme(
             data: CupertinoThemeData(
               textTheme: CupertinoTextThemeData(
@@ -81,8 +86,228 @@ class _NewTranferState extends State<NewTransferActivity> {
         ),
       );
     } else {
-      return Container();
+      return fragmentRepeating();
     }
+  }
+  Widget subFagmentRepeatingOf(int type){
+    return Padding(
+      padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
+      child: Container(
+        decoration: decorated3DBlack,
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(bottom: 5,),
+                child: Text(
+                  "Day(s) of week:",
+                  style: textColoredStyle(),
+                ),
+              ),
+              ToggleButtons(children: [
+                GestureDetector(
+                    onTap: (){
+                      setState(() {
+                        fragmentSelected = 1;
+                      });
+                    },
+                    child: CusTomToggleButton(true, "Weekly")
+                ),
+              ], isSelected: [true]),
+              Padding(
+                padding: EdgeInsets.only(bottom: 5,),
+                child: Text(
+                  "From date",
+                  style: textColoredStyle(),
+                ),
+              ),
+              Container(
+                height: 100,
+                decoration: decorated3DBlack,
+                child: CupertinoTheme(
+                  data: CupertinoThemeData(
+                    textTheme: CupertinoTextThemeData(
+                      dateTimePickerTextStyle: TextStyle(
+                          fontSize: 16, color: WHITE, fontFamily: 'chalkboard'),
+                    ),
+                  ),
+                  child: CupertinoDatePicker(
+                      mode: CupertinoDatePickerMode.date,
+                      initialDateTime: DateTime.now(),
+                      onDateTimeChanged: (dateTime) {
+//                  nonRepeatedDetail.date.set(dateTime.day, dateTime.month, dateTime.year);
+                      }),
+                ),
+              )
+            ],
+          ),
+        ),
+
+      ),
+    );
+  }
+  Widget fragmentRepeating(){
+    return Container(
+      child: Column(
+        children: [
+          Container(
+            height: 100,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                GestureDetector(
+                    onTap: (){
+                      setState(() {
+                        fragmentSelected = 1;
+                      });
+                    },
+                    child: CusTomToggleButton(fragmentSelected == 1, "Weekly")
+                ),
+                GestureDetector(
+                    onTap: (){
+                      setState(() {
+                        fragmentSelected = 2;
+                      });
+                    },
+                    child: CusTomToggleButton(fragmentSelected == 2, "Monthly")
+                ),
+                GestureDetector(
+                    onTap: (){
+                      setState(() {
+                        fragmentSelected = 3;
+                      });
+                    },
+                    child: CusTomToggleButton(fragmentSelected == 3, "Every n day(s)")
+                ),
+
+              ],
+            ),
+          ),
+          subFagmentRepeatingOf(1),
+        ],
+      ),
+    );
+  }
+
+  SingleChildScrollView body(){
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.only(left: 20, right: 20, top: 20),
+            child: CustomTextField(
+              child: TextFormField(
+                cursorColor: isEarningMode ? GREEN : RED,
+                keyboardType: TextInputType.number,
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.digitsOnly
+                ],
+                style: TextStyle(
+                  color: WHITE,
+                  fontFamily: 'chalkboard',
+                  fontSize: 20,
+                  decorationColor: GREEN,
+                ),
+                decoration: InputDecoration(
+                  hintStyle: TextStyle(
+                    color: WHITE_DARK,
+                    fontFamily: 'math_tapping',
+                    fontSize: 20,
+                  ),
+                  icon: Icon(
+                    Icons.attach_money,
+                    color: isEarningMode ? GREEN : RED,
+                  ),
+                  hintText: '',
+                  border: InputBorder.none,
+                  labelText: "*How much",
+                  labelStyle: TextStyle(
+                    color: WHITE_DARK,
+                    fontFamily: 'math_tapping',
+                    fontSize: 20,
+                  ),
+                ),
+                validator: (String value) {
+                  return value.contains('@')
+                      ? 'Do not use the @ char.'
+                      : null;
+                },
+                onChanged: (text) {
+                  nonRepeatedDetail.value = double.parse(text);
+                },
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 20, right: 20, top: 20),
+            child: CustomTextField(
+              child: TextFormField(
+                cursorColor: isEarningMode ? GREEN : RED,
+                style: TextStyle(
+                  color: WHITE,
+                  fontFamily: 'chalkboard',
+                  fontSize: 20,
+                  decorationColor: GREEN,
+                ),
+                decoration: InputDecoration(
+                  hintStyle: TextStyle(
+                    color: WHITE_DARK,
+                    fontFamily: 'math_tapping',
+                    fontSize: 20,
+                  ),
+                  icon: Icon(
+                    Icons.notes,
+                    color: isEarningMode ? GREEN : RED,
+                  ),
+//                      hintText: '100.000',
+                  labelText: "*Notes",
+                  labelStyle: TextStyle(
+                    color: WHITE_DARK,
+                    fontFamily: 'math_tapping',
+                    fontSize: 20,
+                  ),
+                  border: InputBorder.none,
+                ),
+                validator: (String value) {
+                  return value.contains('@')
+                      ? 'Do not use the @ char.'
+                      : null;
+                },
+                onChanged: (text) {
+                  nonRepeatedDetail.note = text;
+                },
+              ),
+            ),
+          ),
+          Align(
+            alignment: Alignment.topLeft,
+            child: Padding(
+              padding: EdgeInsets.only(left: 20, top: 20),
+              child: Row(
+                children: [
+                  Checkbox(
+                    value: tmpCheckBox,
+                    activeColor: isEarningMode ? GREEN : RED,
+                    onChanged: (value) {
+                      setState(() {
+                        tmpCheckBox = !tmpCheckBox;
+                      });
+                    },
+                  ),
+                  Text(
+                    "Repeated",
+                    style: textColoredStyle(),
+                  )
+                ],
+              ),
+            ),
+          ),
+          getSubFragment(tmpCheckBox),
+        ],
+      ),
+    );
   }
 
   @override
@@ -94,123 +319,21 @@ class _NewTranferState extends State<NewTransferActivity> {
         bottom: false,
         child: Scaffold(
           backgroundColor: GRAY,
-          body: Column(
-            children: [
+          body: Stack(
+            children: [       // 10% of height
+              Padding(
+                padding: EdgeInsets.only(top: screenSize.height*0.1),
+                child: Container(
+                  height: screenSize.height*1,
+                  child: SingleChildScrollView(
+                    child: body(),
+                  ),
+                ),
+              ),
+
               buildHeader(screenSize),
-              Padding(
-                padding: EdgeInsets.only(left: 20, right: 20, top: 20),
-                child: CustomTextField(
-                  child: TextFormField(
-                    cursorColor: isEarningMode ? GREEN : RED,
-                    keyboardType: TextInputType.number,
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.digitsOnly
-                    ],
-                    style: TextStyle(
-                      color: WHITE,
-                      fontFamily: 'chalkboard',
-                      fontSize: 20,
-                      decorationColor: GREEN,
-                    ),
-                    decoration: InputDecoration(
-                      hintStyle: TextStyle(
-                        color: WHITE_DARK,
-                        fontFamily: 'math_tapping',
-                        fontSize: 20,
-                      ),
-                      icon: Icon(
-                        Icons.attach_money,
-                        color: isEarningMode ? GREEN : RED,
-                      ),
-                      hintText: '',
-                      border: InputBorder.none,
-                      labelText: "*How much",
-                      labelStyle: TextStyle(
-                        color: WHITE_DARK,
-                        fontFamily: 'math_tapping',
-                        fontSize: 20,
-                      ),
-                    ),
-                    validator: (String value) {
-                      return value.contains('@')
-                          ? 'Do not use the @ char.'
-                          : null;
-                    },
-                    onChanged: (text) {
-                      nonRepeatedDetail.value = double.parse(text);
-                    },
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 20, right: 20, top: 20),
-                child: CustomTextField(
-                  child: TextFormField(
-                    cursorColor: isEarningMode ? GREEN : RED,
-                    style: TextStyle(
-                      color: WHITE,
-                      fontFamily: 'chalkboard',
-                      fontSize: 20,
-                      decorationColor: GREEN,
-                    ),
-                    decoration: InputDecoration(
-                      hintStyle: TextStyle(
-                        color: WHITE_DARK,
-                        fontFamily: 'math_tapping',
-                        fontSize: 20,
-                      ),
-                      icon: Icon(
-                        Icons.notes,
-                        color: isEarningMode ? GREEN : RED,
-                      ),
-//                      hintText: '100.000',
-                      labelText: "*Notes",
-                      labelStyle: TextStyle(
-                        color: WHITE_DARK,
-                        fontFamily: 'math_tapping',
-                        fontSize: 20,
-                      ),
-                      border: InputBorder.none,
-                    ),
-                    validator: (String value) {
-                      return value.contains('@')
-                          ? 'Do not use the @ char.'
-                          : null;
-                    },
-                    onChanged: (text) {
-                      nonRepeatedDetail.note = text;
-                    },
-                  ),
-                ),
-              ),
-              Align(
-                alignment: Alignment.topLeft,
-                child: Padding(
-                  padding: EdgeInsets.only(left: 20, top: 20),
-                  child: Row(
-                    children: [
-                      Checkbox(
-                        value: tmpCheckBox,
-                        activeColor: isEarningMode ? GREEN : RED,
-                        onChanged: (value) {
-                          setState(() {
-                            tmpCheckBox = !tmpCheckBox;
-                          });
-                        },
-                      ),
-                      Text(
-                        "Repeated",
-                        style: TextStyle(
-                          fontFamily: 'math_tapping',
-                          color: isEarningMode ? GREEN : RED,
-                          fontSize: 20,
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              getSubFragment(tmpCheckBox),
+//              body(),
+
             ],
           ),
         ),
@@ -218,21 +341,11 @@ class _NewTranferState extends State<NewTransferActivity> {
     );
   }
 
-  BoxDecoration decoratedBox() {
-    return BoxDecoration(
-        color: GRAY,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(color: BLACK, offset: Offset(0, 1), blurRadius: 0)
-        ]);
-  }
-
   Align buildHeader(Size screenSize) {
     return Align(
       alignment: Alignment.topCenter,
       child: Container(
-        child:
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Padding(
             padding: EdgeInsets.only(left: 10),
             child: ButtonTheme(
@@ -298,12 +411,7 @@ class _NewTranferState extends State<NewTransferActivity> {
             ),
           ),
         ]),
-        decoration: BoxDecoration(
-            color: GRAY,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: [
-              BoxShadow(color: BLACK, offset: Offset(0, 1), blurRadius: 0)
-            ]),
+        decoration: decorated3DBlack,
         height: screenSize.height * 0.1,
       ),
     );

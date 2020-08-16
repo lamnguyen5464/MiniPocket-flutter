@@ -39,11 +39,10 @@ class _FragmentAuthentication extends State<FragmentAuthentication> {
       child: Column(
         children: [
           Image.asset(
-              "assets/icon_none.png",
-            width: screenSize.height*0.2,
-            height: screenSize.height*0.2,
+            "assets/icon_none.png",
+            width: screenSize.height * 0.2,
+            height: screenSize.height * 0.2,
           ),
-
           Padding(
             padding: EdgeInsets.only(left: 20, right: 20, top: 20),
             child: CustomTextField(
@@ -113,7 +112,8 @@ class _FragmentAuthentication extends State<FragmentAuthentication> {
             padding: const EdgeInsets.only(left: 20, right: 20),
             child: Text(
               ((errorMessage != "") ? "*" : "") + errorMessage,
-              style: TextStyle(color: RED, fontFamily: "chalkboard", fontSize: 13),
+              style:
+                  TextStyle(color: RED, fontFamily: "chalkboard", fontSize: 13),
             ),
           ),
           Padding(
@@ -124,7 +124,8 @@ class _FragmentAuthentication extends State<FragmentAuthentication> {
               ),
               color: BLUE,
               child: Padding(
-                padding: const EdgeInsets.only(left: 22, right: 22, top: 10, bottom: 10),
+                padding: const EdgeInsets.only(
+                    left: 22, right: 22, top: 10, bottom: 10),
                 child: Text(
                   "Log in",
                   style: TextStyle(
@@ -137,9 +138,10 @@ class _FragmentAuthentication extends State<FragmentAuthentication> {
               onPressed: () async {
                 print("clicked");
 
-                try{
-                  await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
-                }catch(e){
+                try {
+                  await FirebaseAuth.instance.signInWithEmailAndPassword(
+                      email: email, password: password);
+                } catch (e) {
                   print(e);
                   print("123");
                   setState(() {
@@ -153,51 +155,43 @@ class _FragmentAuthentication extends State<FragmentAuthentication> {
             children: [
               Spacer(),
               FlatButton(
-                child: Image.asset("assets/icon_facebook.png",
-                  width: screenSize.height*0.05,
-                  height: screenSize.height*0.05,
+                child: Image.asset(
+                  "assets/icon_facebook.png",
+                  width: screenSize.height * 0.05,
+                  height: screenSize.height * 0.05,
                 ),
-                onPressed: (){
+                onPressed: () async {
                   print("clicked Facebook");
-                  try{
-                    UserAuthentication.signInWithFacebook();
-                  }catch(e){
-                    print("_______________");
-                    print(e);
-                  }
+                  await UserAuthentication.signInWithFacebook(context);
                 },
               ),
               Text(
                 "or",
-                style: TextStyle(
-                  color: WHITE,
-                  fontFamily: 'chalkboard'
-                ),
-
+                style: TextStyle(color: WHITE, fontFamily: 'chalkboard'),
               ),
               FlatButton(
-                child: Image.asset("assets/icon_google.png",
-                  width: screenSize.height*0.05,
-                  height: screenSize.height*0.05,
+                child: Image.asset(
+                  "assets/icon_google.png",
+                  width: screenSize.height * 0.05,
+                  height: screenSize.height * 0.05,
                 ),
                 onPressed: () async {
                   print("clicked Google");
-                  try{
+                  try {
                     await UserAuthentication.signInWithGoogle();
-                  }catch(e){
-
-                    print("____________");
-                    print(e+ "_________");
+                  } on PlatformException catch (e) {
+//                    print(e.code);
                   }
                 },
-
               ),
               Spacer(),
             ],
           ),
-
           Padding(
-            padding: EdgeInsets.only(bottom: 10, top: 20,),
+            padding: EdgeInsets.only(
+              bottom: 10,
+              top: 20,
+            ),
             child: Row(
               children: [
                 Spacer(),
@@ -208,7 +202,6 @@ class _FragmentAuthentication extends State<FragmentAuthentication> {
                     fontFamily: "chalkboard",
                     fontSize: 14,
                   ),
-
                 ),
                 FlatButton(
                   child: Text(
@@ -220,7 +213,7 @@ class _FragmentAuthentication extends State<FragmentAuthentication> {
                       fontFamily: 'chalkboard',
                     ),
                   ),
-                  onPressed: (){
+                  onPressed: () {
                     print("Clicked sign up button");
                   },
                 ),
@@ -246,10 +239,9 @@ class _FragmentAuthentication extends State<FragmentAuthentication> {
                 case ConnectionState.waiting:
                   print("Waiting");
                   return Center(
-                    child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color> (BLUE),
-                    )
-                  );
+                      child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(BLUE),
+                  ));
                   break;
 
                 case ConnectionState.active:
@@ -264,7 +256,8 @@ class _FragmentAuthentication extends State<FragmentAuthentication> {
                             fontSize: 25,
                           ),
                         ),
-                        RaisedButton(child: Text("Sign out"),
+                        RaisedButton(
+                            child: Text("Sign out"),
                             onPressed: () {
                               FirebaseAuth.instance.signOut();
                             }),
@@ -281,15 +274,10 @@ class _FragmentAuthentication extends State<FragmentAuthentication> {
                     child: Text(
                       "something goes wrong!",
                       style: TextStyle(
-                        color: BLUE,
-                        fontSize: 20,
-                        fontFamily: "chalkboard"
-                      ),
+                          color: BLUE, fontSize: 20, fontFamily: "chalkboard"),
                     ),
                   );
               }
-            }
-            )
-    );
+            }));
   }
 }

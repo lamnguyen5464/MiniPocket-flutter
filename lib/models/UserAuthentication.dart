@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+
+import '../constat.dart';
 
 class UserAuthentication {
   Future<FirebaseUser> signIn() async {
@@ -21,63 +23,105 @@ class UserAuthentication {
   static Future<AuthResult> signInWithGoogle() async {
 
     final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
-    final GoogleSignInAuthentication googleAuth =
-    await googleUser.authentication;
+    if(googleUser == null) return null;
+    final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
 
+    if (googleAuth != null){
 
-    final AuthCredential credential = GoogleAuthProvider.getCredential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
+      final AuthCredential credential = GoogleAuthProvider.getCredential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
 
-    return await FirebaseAuth.instance.signInWithCredential(credential);
+      return await FirebaseAuth.instance.signInWithCredential(credential);
+
+    }
+
+    return null;
 
   }
-  static Future signInWithFacebook() async{
-    final result = await FacebookLogin().logIn(["email"]);
-
-    print(result.status);
-
-    if (result.status == FacebookLoginStatus.loggedIn){
-      final credential = FacebookAuthProvider.getCredential(accessToken: result.accessToken.token);
-
-      try{
-        final FirebaseUser user =
-            (await FirebaseAuth.instance.signInWithCredential(credential)).user;
-        print("signed in " + user.displayName);
-      }on PlatformException catch(e){
-        if (e.code != 'ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL')
-          throw e;
-        // Now we caught the error we're talking about, we get the email by calling graph API manually
+  static Future linkFacebookToGoogle(AuthCredential credentialFacebook, FacebookLoginResult result) async{
         final httpClient = new HttpClient();
         final graphRequest = await httpClient.getUrl(Uri.parse("https://graph.facebook.com/v2.12/me?fields=email&access_token=${result.accessToken.token}"));
         final graphResponse = await graphRequest.close();
         final graphResponseJSON = json.decode((await graphResponse.transform(utf8.decoder).single));
         final email = graphResponseJSON["email"];
         print(email + "*******");
-        // Now we have both credential and email that is required for linking
         final signInMethods = await FirebaseAuth.instance.fetchSignInMethodsForEmail(email: email);
-        // Assume that signInMethods[0] is 'google.com'
+
+        if (signInMethods[0] == "google.com"){
+          final authResult = await signInWithGoogle();
+          if (authResult.user.email == email) {
+            // Now we can link the accounts together
+            await authResult.user.linkWithCredential(credentialFacebook);
+          }
+
+        }
 
 
+  }
+  static Future<AuthResult> signInWithFacebook(BuildContext context) async{
+    final resultLoginFacebook = await FacebookLogin().logIn(["email"]);
 
-        final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
-        final GoogleSignInAuthentication googleAuth =
-        await googleUser.authentication;
-        final AuthCredential credential1 = GoogleAuthProvider.getCredential(
-          accessToken: googleAuth.accessToken,
-          idToken: googleAuth.idToken,
+    if (resultLoginFacebook.status == FacebookLoginStatus.loggedIn) {
+      final credentialFacebook = FacebookAuthProvider.getCredential(
+          accessToken: resultLoginFacebook.accessToken.token);
+      try{
+
+        return await FirebaseAuth.instance.signInWithCredential(credentialFacebook);
+
+      }on PlatformException catch(e){
+        if (e.code != 'ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL')
+          throw e;
+        showDialog<void>(
+          context: context,
+          barrierDismissible: true,
+          // false = user must tap button, true = tap outside dialog
+          builder: (BuildContext dialogContext) {
+            return AlertDialog(
+              title: Text(
+                'Alert!',
+                style: TextStyle(
+                    color: WHITE, fontFamily: 'chalkboard'),
+              ),
+              backgroundColor: GRAY,
+              content: Text(
+                'This email has been used to sign up by Google.',
+                style: TextStyle(
+                    color: WHITE_DARK, fontFamily: 'chalkboard'),
+              ),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text(
+                    'Oh okay',
+                    style: TextStyle(
+                        color: WHITE, fontFamily: 'chalkboard'),
+                  ),
+                  onPressed: () {
+                    Navigator.of(dialogContext)
+                        .pop(); // Dismiss alert dialog
+                  },
+                ),
+                FlatButton(
+                  child: Text(
+                    'Link to Google',
+                    style: TextStyle(
+                        color: WHITE, fontFamily: 'chalkboard'),
+                  ),
+                  onPressed: () async {
+                    await linkFacebookToGoogle(credentialFacebook, resultLoginFacebook);
+                    Navigator.of(dialogContext)
+                        .pop();
+                  },
+                )
+              ],
+            );
+          },
         );
-        final authResult = await signInWithGoogle();  // ... do the Google sign-in logic here and get the Firebase AuthResult
-    if (authResult.user.email == email) {
-    // Now we can link the accounts together
-    await authResult.user.linkWithCredential(credential);
-    }
+      }
 
-  }
     }
+    return null;
   }
-//  static void signInWithEmailPassword(String email, String password){
-//
-//  }
+
 }

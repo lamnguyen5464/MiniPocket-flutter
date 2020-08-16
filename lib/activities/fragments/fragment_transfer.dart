@@ -18,7 +18,7 @@ class _FragmentTransferState extends State<FragmentTransfer> {
     tmp.value = (document["value"] is double) ? document["value"] : document["value"].toDouble();
     tmp.note = document["note"];
     tmp.date.setFromDateCode(document["dateCode"]);
-    print(tmp.value.toString() + " " + tmp.note + " " + tmp.date.getDateCode().toString());
+//    print(tmp.value.toString() + " " + tmp.note + " " + tmp.date.getDateCode().toString());
     return tmp;
   }
 
