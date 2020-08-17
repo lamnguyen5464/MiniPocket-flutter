@@ -19,6 +19,14 @@ class DateType{
     this.year = year;
   }
 
+  void clear(){
+    this.date = this.month = this.year = 0;
+  }
+
+  bool isEmptyDate(){
+    return (this.date == 0);
+  }
+
   void setFromDateCode(int dateCode){
     this.date = dateCode % 100;
     dateCode ~/= 100;

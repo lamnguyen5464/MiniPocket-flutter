@@ -15,11 +15,3 @@ const RED = Color(0xffFF7676);
 const RED_DARK = Color(0xffC02C37);
 const COLLECTION_TAG = "NonRepeatedDetails";
 const ERROR_WRONG_PASSWORD_TAG = "";
-
-var decorated3DBlack = BoxDecoration(
-    color: GRAY,
-    borderRadius: BorderRadius.circular(10),
-    boxShadow: [
-      BoxShadow(color: BLACK, offset: Offset(0, 1), blurRadius: 0)
-    ])
-;

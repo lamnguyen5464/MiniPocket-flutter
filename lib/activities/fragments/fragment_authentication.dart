@@ -1,4 +1,5 @@
 import 'package:MiniPocket_flutter/activities/main/new_transfer.dart';
+import 'package:MiniPocket_flutter/components/custom_text_field.dart';
 import 'package:MiniPocket_flutter/constat.dart';
 import 'package:MiniPocket_flutter/models/UserAuthentication.dart';
 import 'package:firebase_auth/firebase_auth.dart';

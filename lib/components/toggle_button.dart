@@ -2,6 +2,7 @@
 import 'package:flutter/cupertino.dart';
 
 import '../constat.dart';
+import '../styles.dart';
 
 class CusTomToggleButton extends StatelessWidget{
 
@@ -15,7 +16,7 @@ class CusTomToggleButton extends StatelessWidget{
       height: screenSize.width*0.2,
       width: screenSize.width*0.2,
       decoration: (_isToggled) ? BoxDecoration(
-        color: GRAY,
+        color: GRAY_LIGHT,
         borderRadius: BorderRadius.circular(10),
           boxShadow: [
             BoxShadow(color: BLACK, offset: Offset(0, 0.2), blurRadius: 0)

@@ -1,10 +1,15 @@
+import 'package:MiniPocket_flutter/activities/viewmodels/NewTrasferViewModel.dart';
+import 'package:MiniPocket_flutter/components/custom_text_field.dart';
 import 'package:MiniPocket_flutter/components/toggle_button.dart';
+import 'package:MiniPocket_flutter/components/toggle_button_week_day.dart';
 import 'package:MiniPocket_flutter/constat.dart';
 import 'package:MiniPocket_flutter/models/NonRepeatedDetail.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import '../../styles.dart';
 
 class NewTransferActivity extends StatefulWidget {
   @override
@@ -12,43 +17,24 @@ class NewTransferActivity extends StatefulWidget {
     return _NewTranferState();
   }
 }
-
-class CustomTextField extends StatelessWidget {
-  final Widget child;
-
-  const CustomTextField({Key key, this.child}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-      decoration: decorated3DBlack,
-      child: child,
-    );
-  }
-}
-
 class _NewTranferState extends State<NewTransferActivity> {
-  int currentSelection = 1;
-  var isEarningMode = true;
-  var tmpCheckBox = true;
-  int fragmentSelected = 0;
-  NonRepeatedDetail nonRepeatedDetail =
-      new NonRepeatedDetail();
+  Size screenSize;
+  NewTransferViewModel viewModel = new NewTransferViewModel();
+  NonRepeatedDetail nonRepeatedDetail = new NonRepeatedDetail();
 
   void postTrasaction() async {
-    await Firestore.instance.collection(COLLECTION_TAG)
-        .add({
-      'value' : isEarningMode ? nonRepeatedDetail.value : -nonRepeatedDetail.value,
-      'note' : nonRepeatedDetail.note,
-      'dateCode' : nonRepeatedDetail.date.getDateCode(),
+    await Firestore.instance.collection(COLLECTION_TAG).add({
+      'value':
+          viewModel.isEarningMode ? nonRepeatedDetail.value : -nonRepeatedDetail.value,
+      'note': nonRepeatedDetail.note,
+      'dateCode': nonRepeatedDetail.date.getDateCode(),
     });
   }
 
-  TextStyle textColoredStyle(){
+  TextStyle textColoredStyle() {
     return TextStyle(
       fontFamily: 'chalkboard',
-      color: isEarningMode ? GREEN : RED,
+      color: viewModel.isEarningMode ? GREEN : RED,
       fontSize: 15,
     );
   }
@@ -89,7 +75,193 @@ class _NewTranferState extends State<NewTransferActivity> {
       return fragmentRepeating();
     }
   }
-  Widget subFagmentRepeatingOf(int type){
+
+  Widget weeklyFragment(){
+    var currentColor = viewModel.isEarningMode ? GREEN : RED;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(
+            bottom: 10,
+          ),
+          child: Text(
+            "Day(s) of week:",
+            style: textColoredStyle(),
+          ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                });
+              },
+              child: CusTomToggleButtonWeekDay(true, "Mo", currentColor),
+            ),
+            GestureDetector(
+                onTap: () {
+                  setState(() {
+                  });
+                },
+                child: CusTomToggleButtonWeekDay(true, "Tu", currentColor)
+            ),
+            GestureDetector(
+                onTap: () {
+                  setState(() {
+                  });
+                },
+                child: CusTomToggleButtonWeekDay(true, "We", currentColor)
+            ),
+            GestureDetector(
+                onTap: () {
+                  setState(() {
+                  });
+                },
+                child: CusTomToggleButtonWeekDay(true, "Th", currentColor)
+            ),
+            GestureDetector(
+                onTap: () {
+                  setState(() {
+                  });
+                },
+                child: CusTomToggleButtonWeekDay(true, "Fr", currentColor)
+            ),
+            GestureDetector(
+                onTap: () {
+                  setState(() {
+                  });
+                },
+                child: CusTomToggleButtonWeekDay(true, "Sa", currentColor)
+            ),
+            GestureDetector(
+                onTap: () {
+                  setState(() {
+                  });
+                },
+                child: CusTomToggleButtonWeekDay(true, "Su", currentColor)
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+
+  Widget monthlyFragment(){
+    var currentColor = viewModel.isEarningMode ? GREEN : RED;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(
+            bottom: 10,
+          ),
+          child: Text(
+            "Date of month:",
+            style: textColoredStyle(),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(right: screenSize.width*0.6),
+          child: CustomTextField(
+            child: TextFormField(
+              cursorColor: currentColor,
+              keyboardType: TextInputType.number,
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(2)
+              ],
+              style: TextStyle(
+                color: WHITE,
+                fontFamily: 'chalkboard',
+                fontSize: 20,
+                decorationColor: GREEN,
+              ),
+              decoration: InputDecoration(
+                hintStyle: TextStyle(
+                  color: WHITE_DARK,
+                  fontFamily: 'math_tapping',
+                  fontSize: 20,
+                ),
+                hintText: '25',
+                border: InputBorder.none,
+              ),
+              onChanged: (text) {
+              },
+            ),
+          ),
+        ),
+
+      ],
+    );
+  }
+
+
+  Widget everyNDaysFragment(){
+    var currentColor = viewModel.isEarningMode ? GREEN : RED;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(
+            bottom: 10,
+          ),
+          child: Text(
+            "Number of days: ",
+            style: textColoredStyle(),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(right: screenSize.width*0.6),
+          child: CustomTextField(
+            child: TextFormField(
+              cursorColor: currentColor,
+              keyboardType: TextInputType.number,
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(2)
+              ],
+              style: TextStyle(
+                color: WHITE,
+                fontFamily: 'chalkboard',
+                fontSize: 20,
+                decorationColor: GREEN,
+              ),
+              decoration: InputDecoration(
+                hintStyle: TextStyle(
+                  color: WHITE_DARK,
+                  fontFamily: 'math_tapping',
+                  fontSize: 20,
+                ),
+                hintText: '25',
+                border: InputBorder.none,
+              ),
+              onChanged: (text) {
+              },
+            ),
+          ),
+        ),
+
+      ],
+    );
+  }
+
+  Widget getRepeatingFragment(){
+    switch(viewModel.type){
+      case TransactionType.weekly: return weeklyFragment();
+
+      case TransactionType.monthly: return monthlyFragment();
+
+      case TransactionType.everyNDay: return everyNDaysFragment();
+
+      default: return Container();
+    }
+  }
+
+  Widget subFagmentRepeatingOf(int type) {
+    var currentColor = viewModel.isEarningMode ? GREEN : RED;
     return Padding(
       padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
       child: Container(
@@ -99,27 +271,14 @@ class _NewTranferState extends State<NewTransferActivity> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              getRepeatingFragment(),
               Padding(
-                padding: EdgeInsets.only(bottom: 5,),
-                child: Text(
-                  "Day(s) of week:",
-                  style: textColoredStyle(),
+                padding: EdgeInsets.only(
+                  bottom: 10,
+                  top: 20
                 ),
-              ),
-              ToggleButtons(children: [
-                GestureDetector(
-                    onTap: (){
-                      setState(() {
-                        fragmentSelected = 1;
-                      });
-                    },
-                    child: CusTomToggleButton(true, "Weekly")
-                ),
-              ], isSelected: [true]),
-              Padding(
-                padding: EdgeInsets.only(bottom: 5,),
                 child: Text(
-                  "From date",
+                  "From date: ",
                   style: textColoredStyle(),
                 ),
               ),
@@ -130,7 +289,44 @@ class _NewTranferState extends State<NewTransferActivity> {
                   data: CupertinoThemeData(
                     textTheme: CupertinoTextThemeData(
                       dateTimePickerTextStyle: TextStyle(
-                          fontSize: 16, color: WHITE, fontFamily: 'chalkboard'),
+                          fontSize: 14, color: WHITE, fontFamily: 'chalkboard'),
+                    ),
+                  ),
+                  child: CupertinoDatePicker(
+                      mode: CupertinoDatePickerMode.date,
+                      initialDateTime: DateTime.now(),
+                      onDateTimeChanged: (dateTime) {
+//                  nonRepeatedDetail.date.set(dateTime.day, dateTime.month, dateTime.year);
+                      }),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                    bottom: 10,
+                    top: 20
+                ),
+                child: GestureDetector(
+                  onTap: (){
+
+                  },
+                  child: Text(
+                    "To date: ",
+                    style: (viewModel.isEarningMode) ? textColoredStyle() : TextStyle(
+                      color: WHITE_DARK,
+                      fontSize: 15,
+                      fontFamily: 'chalkboard',
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                height: 100,
+                decoration: decorated3DBlack,
+                child: CupertinoTheme(
+                  data: CupertinoThemeData(
+                    textTheme: CupertinoTextThemeData(
+                      dateTimePickerTextStyle: TextStyle(
+                          fontSize: 14, color: WHITE, fontFamily: 'chalkboard'),
                     ),
                   ),
                   child: CupertinoDatePicker(
@@ -144,11 +340,11 @@ class _NewTranferState extends State<NewTransferActivity> {
             ],
           ),
         ),
-
       ),
     );
   }
-  Widget fragmentRepeating(){
+
+  Widget fragmentRepeating() {
     return Container(
       child: Column(
         children: [
@@ -158,30 +354,28 @@ class _NewTranferState extends State<NewTransferActivity> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       setState(() {
-                        fragmentSelected = 1;
+                        viewModel.changeType(TransactionType.weekly);
                       });
                     },
-                    child: CusTomToggleButton(fragmentSelected == 1, "Weekly")
-                ),
+                    child: CusTomToggleButton(viewModel.type == TransactionType.weekly, "Weekly")),
                 GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       setState(() {
-                        fragmentSelected = 2;
+                        viewModel.changeType(TransactionType.monthly);
                       });
                     },
-                    child: CusTomToggleButton(fragmentSelected == 2, "Monthly")
-                ),
+                    child:
+                        CusTomToggleButton(viewModel.type == TransactionType.monthly, "Monthly")),
                 GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       setState(() {
-                        fragmentSelected = 3;
+                        viewModel.changeType(TransactionType.everyNDay);
                       });
                     },
-                    child: CusTomToggleButton(fragmentSelected == 3, "Every n day(s)")
-                ),
-
+                    child: CusTomToggleButton(
+                        viewModel.type == TransactionType.everyNDay, "Every n day(s)")),
               ],
             ),
           ),
@@ -191,7 +385,7 @@ class _NewTranferState extends State<NewTransferActivity> {
     );
   }
 
-  SingleChildScrollView body(){
+  SingleChildScrollView body() {
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -199,7 +393,7 @@ class _NewTranferState extends State<NewTransferActivity> {
             padding: EdgeInsets.only(left: 20, right: 20, top: 20),
             child: CustomTextField(
               child: TextFormField(
-                cursorColor: isEarningMode ? GREEN : RED,
+                cursorColor: viewModel.isEarningMode ? GREEN : RED,
                 keyboardType: TextInputType.number,
                 inputFormatters: <TextInputFormatter>[
                   FilteringTextInputFormatter.digitsOnly
@@ -218,7 +412,7 @@ class _NewTranferState extends State<NewTransferActivity> {
                   ),
                   icon: Icon(
                     Icons.attach_money,
-                    color: isEarningMode ? GREEN : RED,
+                    color: viewModel.isEarningMode ? GREEN : RED,
                   ),
                   hintText: '',
                   border: InputBorder.none,
@@ -230,9 +424,7 @@ class _NewTranferState extends State<NewTransferActivity> {
                   ),
                 ),
                 validator: (String value) {
-                  return value.contains('@')
-                      ? 'Do not use the @ char.'
-                      : null;
+                  return value.contains('@') ? 'Do not use the @ char.' : null;
                 },
                 onChanged: (text) {
                   nonRepeatedDetail.value = double.parse(text);
@@ -241,10 +433,10 @@ class _NewTranferState extends State<NewTransferActivity> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(left: 20, right: 20, top: 20),
+            padding: EdgeInsets.only(left: 20, right: 20, top: 10),
             child: CustomTextField(
               child: TextFormField(
-                cursorColor: isEarningMode ? GREEN : RED,
+                cursorColor: viewModel.isEarningMode ? GREEN : RED,
                 style: TextStyle(
                   color: WHITE,
                   fontFamily: 'chalkboard',
@@ -259,7 +451,7 @@ class _NewTranferState extends State<NewTransferActivity> {
                   ),
                   icon: Icon(
                     Icons.notes,
-                    color: isEarningMode ? GREEN : RED,
+                    color: viewModel.isEarningMode ? GREEN : RED,
                   ),
 //                      hintText: '100.000',
                   labelText: "*Notes",
@@ -271,9 +463,7 @@ class _NewTranferState extends State<NewTransferActivity> {
                   border: InputBorder.none,
                 ),
                 validator: (String value) {
-                  return value.contains('@')
-                      ? 'Do not use the @ char.'
-                      : null;
+                  return value.contains('@') ? 'Do not use the @ char.' : null;
                 },
                 onChanged: (text) {
                   nonRepeatedDetail.note = text;
@@ -288,23 +478,25 @@ class _NewTranferState extends State<NewTransferActivity> {
               child: Row(
                 children: [
                   Checkbox(
-                    value: tmpCheckBox,
-                    activeColor: isEarningMode ? GREEN : RED,
+                    value: viewModel.isRepeating(),
+                    activeColor: viewModel.isEarningMode ? GREEN : RED,
                     onChanged: (value) {
                       setState(() {
-                        tmpCheckBox = !tmpCheckBox;
+                        viewModel.changeType((viewModel.type == TransactionType.non_repeating)
+                            ? TransactionType.weekly
+                            : TransactionType.non_repeating);
                       });
                     },
                   ),
                   Text(
-                    "Repeated",
+                    "Repeating",
                     style: textColoredStyle(),
                   )
                 ],
               ),
             ),
           ),
-          getSubFragment(tmpCheckBox),
+          getSubFragment(viewModel.isRepeating()),
         ],
       ),
     );
@@ -312,7 +504,7 @@ class _NewTranferState extends State<NewTransferActivity> {
 
   @override
   Widget build(BuildContext context) {
-    Size screenSize = MediaQuery.of(context).size;
+    screenSize = MediaQuery.of(context).size;
     return Container(
       color: GRAY,
       child: SafeArea(
@@ -320,11 +512,12 @@ class _NewTranferState extends State<NewTransferActivity> {
         child: Scaffold(
           backgroundColor: GRAY,
           body: Stack(
-            children: [       // 10% of height
+            children: [
+              // 10% of height
               Padding(
-                padding: EdgeInsets.only(top: screenSize.height*0.1),
+                padding: EdgeInsets.only(top: screenSize.height * 0.1),
                 child: Container(
-                  height: screenSize.height*1,
+                  height: screenSize.height * 1,
                   child: SingleChildScrollView(
                     child: body(),
                   ),
@@ -333,7 +526,6 @@ class _NewTranferState extends State<NewTransferActivity> {
 
               buildHeader(screenSize),
 //              body(),
-
             ],
           ),
         ),
@@ -345,7 +537,8 @@ class _NewTranferState extends State<NewTransferActivity> {
     return Align(
       alignment: Alignment.topCenter,
       child: Container(
-        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        child:
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Padding(
             padding: EdgeInsets.only(left: 10),
             child: ButtonTheme(
@@ -355,12 +548,12 @@ class _NewTranferState extends State<NewTransferActivity> {
                   "BACK",
                   style: TextStyle(
                       fontFamily: 'chalkboard',
-                      color: isEarningMode ? GREEN : RED),
+                      color: viewModel.isEarningMode ? GREEN : RED),
                 ),
                 color: GRAY,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5),
-                  side: BorderSide(color: isEarningMode ? GREEN : RED),
+                  side: BorderSide(color: viewModel.isEarningMode ? GREEN : RED),
                 ),
                 onPressed: () {
                   Navigator.pop(context, true);
@@ -371,17 +564,17 @@ class _NewTranferState extends State<NewTransferActivity> {
           Row(
             children: [
               Text(
-                isEarningMode ? "Earn" : "Pay",
+                viewModel.isEarningMode ? "Earn" : "Pay",
                 style: TextStyle(
-                    color: isEarningMode ? GREEN : RED,
+                    color: viewModel.isEarningMode ? GREEN : RED,
                     fontFamily: 'chalkboard',
                     fontSize: 20),
               ),
               Switch(
-                value: isEarningMode,
+                value: viewModel.isEarningMode,
                 onChanged: (value) {
                   setState(() {
-                    isEarningMode = !isEarningMode;
+                    viewModel.isEarningMode = !viewModel.isEarningMode;
                   });
                 },
                 activeTrackColor: GREEN,
@@ -400,7 +593,7 @@ class _NewTranferState extends State<NewTransferActivity> {
                   "ADD",
                   style: TextStyle(fontFamily: 'chalkboard'),
                 ),
-                color: isEarningMode ? GREEN : RED,
+                color: viewModel.isEarningMode ? GREEN : RED,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5),
                 ),
