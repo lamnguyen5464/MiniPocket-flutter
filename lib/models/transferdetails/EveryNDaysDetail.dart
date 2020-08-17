@@ -1,11 +1,11 @@
 import 'package:MiniPocket_flutter/models/DateType.dart';
 import 'package:MiniPocket_flutter/models/transferdetails/TransactionData.dart';
 
-class MonthlyDetail extends TransactionData {
+class EveryNDaysDetail extends TransactionData {
   DateType startDate, endDate;
   int numDate;
 
-  MonthlyDetail() : super(){
+  EveryNDaysDetail() : super(){
     this.startDate = new DateType.fromDetail(DateTime.now().day, DateTime.now().month, DateTime.now().year);
     this.endDate = new DateType.fromDetail(DateTime.now().day, DateTime.now().month, DateTime.now().year);
     numDate = DateTime.now().day;

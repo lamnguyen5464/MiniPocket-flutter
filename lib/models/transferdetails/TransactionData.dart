@@ -1,4 +1,6 @@
 
+import 'package:MiniPocket_flutter/models/transferdetails/EveryNDaysDetail.dart';
+import 'package:MiniPocket_flutter/models/transferdetails/MonthlyDetail.dart';
 import 'package:MiniPocket_flutter/models/transferdetails/NonRepeatedDetail.dart';
 import 'package:MiniPocket_flutter/models/transferdetails/WeeklyDetail.dart';
 
@@ -16,6 +18,8 @@ abstract class FactoryTransaction{
     switch(type){
       case TransactionType.non_repeating: return NonRepeatedDetail();
       case TransactionType.weekly: return WeeklyDetail();
+      case TransactionType.monthly: return MonthlyDetail();
+      case TransactionType.everyNDay: return EveryNDaysDetail();
     }
     return null;
   }
@@ -24,6 +28,8 @@ abstract class FactoryTransaction{
   String getNote();
   bool haveSelected(DayOfWeek day);
   void swichSelectionOn(DayOfWeek day);
+  void updateNumOfDate(int date);
+  int getNumOfDate();
 
 }
 
@@ -43,5 +49,11 @@ abstract class TransactionData implements FactoryTransaction{
   }
   void swichSelectionOn(DayOfWeek day){
     return;
+  }
+  void updateNumOfDate(int date){
+    return;
+  }
+  int getNumOfDate(){
+    return -1;
   }
 }

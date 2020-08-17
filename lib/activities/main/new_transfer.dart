@@ -196,7 +196,9 @@ class _NewTranferState extends State<NewTransferActivity> {
                 hintText: '25',
                 border: InputBorder.none,
               ),
+              initialValue: viewModel.details.getNumOfDate().toString(),
               onChanged: (text) {
+                viewModel.details.updateNumOfDate(int.parse(text));
               },
             ),
           ),
@@ -247,6 +249,7 @@ class _NewTranferState extends State<NewTransferActivity> {
                 border: InputBorder.none,
               ),
               onChanged: (text) {
+                viewModel.details.updateNumOfDate(int.parse(text));
               },
             ),
           ),
