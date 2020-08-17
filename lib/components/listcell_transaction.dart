@@ -1,4 +1,4 @@
-import 'package:MiniPocket_flutter/models/NonRepeatedDetail.dart';
+import 'package:MiniPocket_flutter/models/transferdetails/NonRepeatedDetail.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../constat.dart';

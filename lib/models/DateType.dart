@@ -1,3 +1,6 @@
+enum DayOfWeek{
+  sun, mon, tue, wed, thu, fri, sat
+}
 
 class DateType{
   int date;
@@ -37,6 +40,12 @@ class DateType{
 
   int getDateCode(){
     return (((year * 100) + this.month) * 100 + this.date);
+  }
+
+  static getNumDateOfWeek(DayOfWeek type){
+    for(int i = 0; i < DayOfWeek.values.length; i++){
+      if (type == DayOfWeek.values[i]) return i;
+    }
   }
 
 }

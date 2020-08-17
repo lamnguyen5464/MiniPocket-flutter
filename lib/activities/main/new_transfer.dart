@@ -3,7 +3,9 @@ import 'package:MiniPocket_flutter/components/custom_text_field.dart';
 import 'package:MiniPocket_flutter/components/toggle_button.dart';
 import 'package:MiniPocket_flutter/components/toggle_button_week_day.dart';
 import 'package:MiniPocket_flutter/constat.dart';
-import 'package:MiniPocket_flutter/models/NonRepeatedDetail.dart';
+import 'package:MiniPocket_flutter/models/DateType.dart';
+import 'package:MiniPocket_flutter/models/transferdetails/NonRepeatedDetail.dart';
+import 'package:MiniPocket_flutter/models/transferdetails/TransactionData.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -20,15 +22,14 @@ class NewTransferActivity extends StatefulWidget {
 class _NewTranferState extends State<NewTransferActivity> {
   Size screenSize;
   NewTransferViewModel viewModel = new NewTransferViewModel();
-  NonRepeatedDetail nonRepeatedDetail = new NonRepeatedDetail();
 
   void postTrasaction() async {
-    await Firestore.instance.collection(COLLECTION_TAG).add({
-      'value':
-          viewModel.isEarningMode ? nonRepeatedDetail.value : -nonRepeatedDetail.value,
-      'note': nonRepeatedDetail.note,
-      'dateCode': nonRepeatedDetail.date.getDateCode(),
-    });
+//    await Firestore.instance.collection(COLLECTION_TAG).add({
+//      'value':
+//          viewModel.isEarningMode ? nonRepeatedDetail.value : -nonRepeatedDetail.value,
+//      'note': nonRepeatedDetail.note,
+//      'dateCode': nonRepeatedDetail.date.getDateCode(),
+//    });
   }
 
   TextStyle textColoredStyle() {
@@ -96,51 +97,58 @@ class _NewTranferState extends State<NewTransferActivity> {
             GestureDetector(
               onTap: () {
                 setState(() {
+                  viewModel.details.swichSelectionOn(DayOfWeek.mon);
                 });
               },
-              child: CusTomToggleButtonWeekDay(true, "Mo", currentColor),
+              child: CusTomToggleButtonWeekDay(viewModel.details.haveSelected(DayOfWeek.mon), "Mo", currentColor),
             ),
             GestureDetector(
                 onTap: () {
                   setState(() {
+                    viewModel.details.swichSelectionOn(DayOfWeek.tue);
                   });
                 },
-                child: CusTomToggleButtonWeekDay(true, "Tu", currentColor)
+                child: CusTomToggleButtonWeekDay(viewModel.details.haveSelected(DayOfWeek.tue), "Tu", currentColor)
             ),
             GestureDetector(
                 onTap: () {
                   setState(() {
+                    viewModel.details.swichSelectionOn(DayOfWeek.wed);
                   });
                 },
-                child: CusTomToggleButtonWeekDay(true, "We", currentColor)
+                child: CusTomToggleButtonWeekDay(viewModel.details.haveSelected(DayOfWeek.wed), "We", currentColor)
             ),
             GestureDetector(
                 onTap: () {
                   setState(() {
+                    viewModel.details.swichSelectionOn(DayOfWeek.thu);
                   });
                 },
-                child: CusTomToggleButtonWeekDay(true, "Th", currentColor)
+                child: CusTomToggleButtonWeekDay(viewModel.details.haveSelected(DayOfWeek.thu), "Th", currentColor)
             ),
             GestureDetector(
                 onTap: () {
                   setState(() {
+                    viewModel.details.swichSelectionOn(DayOfWeek.fri);
                   });
                 },
-                child: CusTomToggleButtonWeekDay(true, "Fr", currentColor)
+                child: CusTomToggleButtonWeekDay(viewModel.details.haveSelected(DayOfWeek.fri), "Fr", currentColor)
             ),
             GestureDetector(
                 onTap: () {
                   setState(() {
+                    viewModel.details.swichSelectionOn(DayOfWeek.sat);
                   });
                 },
-                child: CusTomToggleButtonWeekDay(true, "Sa", currentColor)
+                child: CusTomToggleButtonWeekDay(viewModel.details.haveSelected(DayOfWeek.sat), "Sa", currentColor)
             ),
             GestureDetector(
                 onTap: () {
                   setState(() {
+                    viewModel.details.swichSelectionOn(DayOfWeek.sun);
                   });
                 },
-                child: CusTomToggleButtonWeekDay(true, "Su", currentColor)
+                child: CusTomToggleButtonWeekDay(viewModel.details.haveSelected(DayOfWeek.sun), "Su", currentColor)
             ),
           ],
         ),
@@ -307,11 +315,13 @@ class _NewTranferState extends State<NewTransferActivity> {
                 ),
                 child: GestureDetector(
                   onTap: (){
-
+                    setState(() {
+                      viewModel.haveEndDate = !viewModel.haveEndDate;
+                    });
                   },
                   child: Text(
                     "To date: ",
-                    style: (viewModel.isEarningMode) ? textColoredStyle() : TextStyle(
+                    style: (viewModel.haveEndDate) ? textColoredStyle() : TextStyle(
                       color: WHITE_DARK,
                       fontSize: 15,
                       fontFamily: 'chalkboard',
@@ -319,7 +329,7 @@ class _NewTranferState extends State<NewTransferActivity> {
                   ),
                 ),
               ),
-              Container(
+              (viewModel.haveEndDate) ? Container(
                 height: 100,
                 decoration: decorated3DBlack,
                 child: CupertinoTheme(
@@ -336,7 +346,7 @@ class _NewTranferState extends State<NewTransferActivity> {
 //                  nonRepeatedDetail.date.set(dateTime.day, dateTime.month, dateTime.year);
                       }),
                 ),
-              )
+              ) : Container(),
             ],
           ),
         ),
@@ -427,7 +437,7 @@ class _NewTranferState extends State<NewTransferActivity> {
                   return value.contains('@') ? 'Do not use the @ char.' : null;
                 },
                 onChanged: (text) {
-                  nonRepeatedDetail.value = double.parse(text);
+                  viewModel.details.set(double.parse(text), viewModel.details.getNote());
                 },
               ),
             ),
@@ -466,7 +476,7 @@ class _NewTranferState extends State<NewTransferActivity> {
                   return value.contains('@') ? 'Do not use the @ char.' : null;
                 },
                 onChanged: (text) {
-                  nonRepeatedDetail.note = text;
+                  viewModel.details.set(viewModel.details.getValue(), text);
                 },
               ),
             ),

@@ -1,6 +1,6 @@
 import 'package:MiniPocket_flutter/components/listcell_transaction.dart';
 import 'package:MiniPocket_flutter/constat.dart';
-import 'package:MiniPocket_flutter/models/NonRepeatedDetail.dart';
+import 'package:MiniPocket_flutter/models/transferdetails/NonRepeatedDetail.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
