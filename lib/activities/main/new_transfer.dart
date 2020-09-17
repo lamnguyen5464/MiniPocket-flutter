@@ -7,6 +7,7 @@ import 'package:MiniPocket_flutter/models/DateType.dart';
 import 'package:MiniPocket_flutter/models/transferdetails/NonRepeatedDetail.dart';
 import 'package:MiniPocket_flutter/models/transferdetails/TransactionData.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -24,12 +25,15 @@ class _NewTranferState extends State<NewTransferActivity> {
   NewTransferViewModel viewModel = new NewTransferViewModel();
 
   void postTrasaction() async {
-//    await Firestore.instance.collection(COLLECTION_TAG).add({
-//      'value':
-//          viewModel.isEarningMode ? nonRepeatedDetail.value : -nonRepeatedDetail.value,
-//      'note': nonRepeatedDetail.note,
-//      'dateCode': nonRepeatedDetail.date.getDateCode(),
-//    });
+    if (viewModel.type != TransactionType.non_repeating) return;
+    FirebaseAuth.instance.currentUser().then((value) async => {
+      await Firestore.instance.collection(value.uid).document(DATA_TAG).collection(NONREPEATED_TAG).add({
+        'value': viewModel.isEarningMode ? viewModel.details.getValue() : -viewModel.details.getValue(),
+        'note': viewModel.details.getNote(),
+        'dateCode': viewModel.details.getNumOfDate(),
+      })
+    });
+
   }
 
   TextStyle textColoredStyle() {
@@ -67,7 +71,7 @@ class _NewTranferState extends State<NewTransferActivity> {
                 mode: CupertinoDatePickerMode.date,
                 initialDateTime: DateTime.now(),
                 onDateTimeChanged: (dateTime) {
-//                  nonRepeatedDetail.date.set(dateTime.day, dateTime.month, dateTime.year);
+                  this.viewModel.details.getNonRepeatingDate().setFromDateTime(dateTime);
                 }),
           ),
         ),

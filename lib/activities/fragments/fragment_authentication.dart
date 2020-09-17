@@ -2,6 +2,7 @@ import 'package:MiniPocket_flutter/activities/main/new_transfer.dart';
 import 'package:MiniPocket_flutter/components/custom_text_field.dart';
 import 'package:MiniPocket_flutter/constat.dart';
 import 'package:MiniPocket_flutter/models/UserAuthentication.dart';
+import 'package:MiniPocket_flutter/models/CurrentUser.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

@@ -16,6 +16,10 @@ class DateType{
     this.set(date, month, year);
   }
 
+  void setFromDateTime(DateTime dateTime){
+    this.set(dateTime.day, dateTime.month, dateTime.year);
+  }
+
   void set(int date, int month, int year){
     this.date = date;
     this.month = month;

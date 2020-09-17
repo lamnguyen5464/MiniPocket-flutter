@@ -2,6 +2,7 @@ import 'package:MiniPocket_flutter/activities/fragments/fragment_authentication.
 import 'package:MiniPocket_flutter/activities/fragments/fragment_status.dart';
 import 'package:MiniPocket_flutter/activities/fragments/fragment_transfer.dart';
 import 'package:MiniPocket_flutter/constat.dart';
+import 'package:MiniPocket_flutter/models/CurrentUser.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -22,6 +23,7 @@ class _MainActivityState extends State<MainActivity>{
       stream: FirebaseAuth.instance.onAuthStateChanged,
       builder: (context, snapshot){
         if (snapshot.hasData){                      //Force to authenticate before joining
+          CurrentUser.uid = snapshot.data.uid;
           return Scaffold(
             backgroundColor: GRAY,
             body: getBody(currentSelection),

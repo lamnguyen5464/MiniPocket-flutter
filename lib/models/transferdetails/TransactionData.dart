@@ -30,6 +30,8 @@ abstract class FactoryTransaction{
   void swichSelectionOn(DayOfWeek day);
   void updateNumOfDate(int date);
   int getNumOfDate();
+  DateType getNonRepeatingDate();
+
 
 }
 
@@ -55,5 +57,8 @@ abstract class TransactionData implements FactoryTransaction{
   }
   int getNumOfDate(){
     return -1;
+  }
+  DateType getNonRepeatingDate(){
+    return new DateType();
   }
 }

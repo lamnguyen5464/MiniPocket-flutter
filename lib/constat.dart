@@ -13,5 +13,6 @@ const YELLOW = Color(0xffffe570);
 const YELLOW_DARK = Color(0xff7B6F37);
 const RED = Color(0xffFF7676);
 const RED_DARK = Color(0xffC02C37);
-const COLLECTION_TAG = "NonRepeatedDetails";
+const DATA_TAG = "Data";
+const NONREPEATED_TAG = "NonRepeatedDetails";
 const ERROR_WRONG_PASSWORD_TAG = "";

@@ -9,6 +9,10 @@ class NonRepeatedDetail extends TransactionData {
     this.date = new DateType.fromDetail(DateTime.now().day, DateTime.now().month, DateTime.now().year);
   }
 
+  @override
+  DateType getNonRepeatingDate(){
+    return this.date;
+  }
 
   bool isEmpty(){
     // ignore: null_aware_in_logical_operator

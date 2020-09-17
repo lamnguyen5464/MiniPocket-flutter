@@ -1,7 +1,9 @@
 import 'package:MiniPocket_flutter/components/listcell_transaction.dart';
 import 'package:MiniPocket_flutter/constat.dart';
+import 'package:MiniPocket_flutter/models/CurrentUser.dart';
 import 'package:MiniPocket_flutter/models/transferdetails/NonRepeatedDetail.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class FragmentTransfer extends StatefulWidget {
@@ -24,7 +26,7 @@ class _FragmentTransferState extends State<FragmentTransfer> {
 
   StreamBuilder<QuerySnapshot> getTransactionList() {
     return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance.collection(COLLECTION_TAG).orderBy("dateCode", descending: true).snapshots(),
+      stream: Firestore.instance.collection(CurrentUser.uid).document(DATA_TAG).collection(NONREPEATED_TAG).orderBy("dateCode", descending: true).snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
         switch (snapshot.connectionState){
           case ConnectionState.waiting:
