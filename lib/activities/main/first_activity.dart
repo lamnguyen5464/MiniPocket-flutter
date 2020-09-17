@@ -2,6 +2,7 @@ import 'package:MiniPocket_flutter/activities/fragments/fragment_authentication.
 import 'package:MiniPocket_flutter/activities/fragments/fragment_status.dart';
 import 'package:MiniPocket_flutter/activities/fragments/fragment_transfer.dart';
 import 'package:MiniPocket_flutter/constat.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class MainActivity extends StatefulWidget{
@@ -16,11 +17,23 @@ class _MainActivityState extends State<MainActivity>{
   int currentSelection = 1;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: GRAY,
-      body: getBody(currentSelection),
-      bottomNavigationBar: buildBottomNavigationBar(),
+
+    return StreamBuilder(
+      stream: FirebaseAuth.instance.onAuthStateChanged,
+      builder: (context, snapshot){
+        if (snapshot.hasData){                      //Force to authenticate before joining
+          return Scaffold(
+            backgroundColor: GRAY,
+            body: getBody(currentSelection),
+            bottomNavigationBar: buildBottomNavigationBar(),
+          );
+        }else{
+          return FragmentAuthentication();
+        }
+      },
     );
+
+
   }
 
   Widget getBody(int index){

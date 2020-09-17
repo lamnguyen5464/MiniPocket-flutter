@@ -238,7 +238,6 @@ class _FragmentAuthentication extends State<FragmentAuthentication> {
             builder: (context, snapshot) {
               switch (snapshot.connectionState) {
                 case ConnectionState.waiting:
-                  print("Waiting");
                   return Center(
                       child: CircularProgressIndicator(
                     valueColor: AlwaysStoppedAnimation<Color>(BLUE),
@@ -246,7 +245,6 @@ class _FragmentAuthentication extends State<FragmentAuthentication> {
                   break;
 
                 case ConnectionState.active:
-                  print("Active");
                   if (snapshot.data != null) {
                     return Column(
                       children: [
