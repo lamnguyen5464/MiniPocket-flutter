@@ -234,50 +234,52 @@ class _FragmentAuthentication extends State<FragmentAuthentication> {
     return Scaffold(
         backgroundColor: GRAY,
         appBar: buildAppBar(),
-        body: StreamBuilder<FirebaseUser>(
-            stream: FirebaseAuth.instance.onAuthStateChanged,
-            builder: (context, snapshot) {
-              switch (snapshot.connectionState) {
-                case ConnectionState.waiting:
-                  return Center(
-                      child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(BLUE),
-                  ));
-                  break;
-
-                case ConnectionState.active:
-                  if (snapshot.data != null) {
-                    return Column(
-                      children: [
-                        Text(
-                          "Signed in " + snapshot.data.uid,
-                          style: TextStyle(
-                            color: WHITE,
-                            fontSize: 25,
-                          ),
-                        ),
-                        RaisedButton(
-                            child: Text("Sign out"),
-                            onPressed: () {
-                              FirebaseAuth.instance.signOut();
-                            }),
-                      ],
-                    );
-                  } else {
-                    return getSignInPage(screenSize);
-                  }
-                  break;
-
-                default:
-                  print("Default");
-                  return Center(
-                    child: Text(
-                      "something goes wrong!",
-                      style: TextStyle(
-                          color: BLUE, fontSize: 20, fontFamily: "chalkboard"),
-                    ),
-                  );
-              }
-            }));
+        body:SingleChildScrollView(child: getSignInPage(screenSize)),
+        // StreamBuilder<FirebaseUser>(
+        //     stream: FirebaseAuth.instance.onAuthStateChanged,
+        //     builder: (context, snapshot) {
+        //       switch (snapshot.connectionState) {
+        //         case ConnectionState.waiting:
+        //           return Center(
+        //               child: CircularProgressIndicator(
+        //             valueColor: AlwaysStoppedAnimation<Color>(BLUE),
+        //           ));
+        //           break;
+        //
+        //         case ConnectionState.active:
+        //           if (snapshot.data != null) {
+        //             return Column(
+        //               children: [
+        //                 Text(
+        //                   "Signed in " + snapshot.data.uid,
+        //                   style: TextStyle(
+        //                     color: WHITE,
+        //                     fontSize: 25,
+        //                   ),
+        //                 ),
+        //                 RaisedButton(
+        //                     child: Text("Sign out"),
+        //                     onPressed: () {
+        //                       FirebaseAuth.instance.signOut();
+        //                     }),
+        //               ],
+        //             );
+        //           } else {
+        //             return getSignInPage(screenSize);
+        //           }
+        //           break;
+        //
+        //         default:
+        //           print("Default");
+        //           return Center(
+        //             child: Text(
+        //               "something goes wrong!",
+        //               style: TextStyle(
+        //                   color: BLUE, fontSize: 20, fontFamily: "chalkboard"),
+        //             ),
+        //           );
+        //       }
+        //     })
+        );
   }
 }

@@ -44,4 +44,19 @@ class WeeklyDetail extends TransactionData {
     return this.value;
   }
 
+  @override
+  DateType getFromDate(){
+    return this.startDate;
+  }
+
+  @override
+  DateType getToDate(){
+    return this.endDate;
+  }
+
+  @override
+  String getWeekCode(){
+    return this.statusDayOfWeek;
+  }
+
 }

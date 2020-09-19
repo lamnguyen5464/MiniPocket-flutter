@@ -42,4 +42,15 @@ class EveryNDaysDetail extends TransactionData {
     this.numDate = date;
   }
 
+  @override
+  DateType getFromDate(){
+    return this.startDate;
+  }
+
+  @override
+  DateType getToDate(){
+    return this.endDate;
+
+  }
+
 }

@@ -28,10 +28,14 @@ abstract class FactoryTransaction{
   String getNote();
   bool haveSelected(DayOfWeek day);
   void swichSelectionOn(DayOfWeek day);
+  String getWeekCode();
   void updateNumOfDate(int date);
+  void updateDateOfMonth(int date);
   int getNumOfDate();
+  int getDateOfMonth();
   DateType getNonRepeatingDate();
-
+  DateType getFromDate();
+  DateType getToDate();
 
 }
 
@@ -60,5 +64,20 @@ abstract class TransactionData implements FactoryTransaction{
   }
   DateType getNonRepeatingDate(){
     return new DateType();
+  }
+  void updateDateOfMonth(int date){
+
+  }
+  int getDateOfMonth(){
+
+  }
+  DateType getFromDate(){
+
+  }
+  DateType getToDate(){
+
+  }
+  String getWeekCode(){
+
   }
 }

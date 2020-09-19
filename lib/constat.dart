@@ -15,4 +15,7 @@ const RED = Color(0xffFF7676);
 const RED_DARK = Color(0xffC02C37);
 const DATA_TAG = "Data";
 const NONREPEATED_TAG = "NonRepeatedDetails";
+const WEEKLY_TAG = "Weekly";
+const MONTHLY_TAG = "Monthly";
+const EVERYNDAY_TAG = "EveryNDay";
 const ERROR_WRONG_PASSWORD_TAG = "";

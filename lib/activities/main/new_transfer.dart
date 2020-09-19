@@ -24,17 +24,6 @@ class _NewTranferState extends State<NewTransferActivity> {
   Size screenSize;
   NewTransferViewModel viewModel = new NewTransferViewModel();
 
-  void postTrasaction() async {
-    if (viewModel.type != TransactionType.non_repeating) return;
-    FirebaseAuth.instance.currentUser().then((value) async => {
-      await Firestore.instance.collection(value.uid).document(DATA_TAG).collection(NONREPEATED_TAG).add({
-        'value': viewModel.isEarningMode ? viewModel.details.getValue() : -viewModel.details.getValue(),
-        'note': viewModel.details.getNote(),
-        'dateCode': viewModel.details.getNumOfDate(),
-      })
-    });
-
-  }
 
   TextStyle textColoredStyle() {
     return TextStyle(
@@ -45,11 +34,7 @@ class _NewTranferState extends State<NewTransferActivity> {
   }
 
   void onClickAddButton() {
-//    print('New transaction: ');
-//    print(nonRepeatedDetail.value);
-//    print(nonRepeatedDetail.note);
-//    print(nonRepeatedDetail.date);
-    postTrasaction();
+    viewModel.postTrasaction();
     Navigator.pop(context, true);
   }
 
@@ -311,7 +296,7 @@ class _NewTranferState extends State<NewTransferActivity> {
                       mode: CupertinoDatePickerMode.date,
                       initialDateTime: DateTime.now(),
                       onDateTimeChanged: (dateTime) {
-//                  nonRepeatedDetail.date.set(dateTime.day, dateTime.month, dateTime.year);
+                        viewModel.details.getFromDate().setFromDateTime(dateTime);
                       }),
                 ),
               ),
@@ -350,7 +335,7 @@ class _NewTranferState extends State<NewTransferActivity> {
                       mode: CupertinoDatePickerMode.date,
                       initialDateTime: DateTime.now(),
                       onDateTimeChanged: (dateTime) {
-//                  nonRepeatedDetail.date.set(dateTime.day, dateTime.month, dateTime.year);
+                        viewModel.details.getToDate().setFromDateTime(dateTime);
                       }),
                 ),
               ) : Container(),
