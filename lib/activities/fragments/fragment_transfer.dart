@@ -1,9 +1,7 @@
 import 'package:MiniPocket_flutter/components/listcell_transaction.dart';
 import 'package:MiniPocket_flutter/constat.dart';
 import 'package:MiniPocket_flutter/models/CurrentUser.dart';
-import 'package:MiniPocket_flutter/models/transferdetails/NonRepeatedDetail.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class FragmentTransfer extends StatefulWidget {
@@ -15,14 +13,6 @@ class FragmentTransfer extends StatefulWidget {
 
 class _FragmentTransferState extends State<FragmentTransfer> {
 
-  NonRepeatedDetail getFromSnap(DocumentSnapshot document){
-    NonRepeatedDetail tmp = new NonRepeatedDetail();
-    tmp.value = (document["value"] is double) ? document["value"] : document["value"].toDouble();
-    tmp.note = document["note"];
-    tmp.date.setFromDateCode(document["dateCode"]);
-//    print(tmp.value.toString() + " " + tmp.note + " " + tmp.date.getDateCode().toString());
-    return tmp;
-  }
 
   StreamBuilder<QuerySnapshot> getTransactionList() {
     return StreamBuilder<QuerySnapshot>(
@@ -39,7 +29,7 @@ class _FragmentTransferState extends State<FragmentTransfer> {
             return ListView.builder(
               itemCount: snapshot.data.documents.length,
               itemBuilder: (context, index){
-                return ListCellTransaction(getFromSnap(snapshot.data.documents[index]));
+                return ListCellTransaction(snapshot.data.documents[index]);
               },
             );
         }
