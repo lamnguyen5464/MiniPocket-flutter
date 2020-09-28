@@ -1,3 +1,4 @@
+import 'package:MiniPocket_flutter/components/app_bar.dart';
 import 'package:MiniPocket_flutter/components/listcell_transaction.dart';
 import 'package:MiniPocket_flutter/constat.dart';
 import 'package:MiniPocket_flutter/models/CurrentUser.dart';
@@ -41,7 +42,7 @@ class _FragmentTransferState extends State<FragmentTransfer> {
     Size screenSize = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: GRAY,
-      appBar: buildAppBar(),
+      appBar: buildAppBar("Transactions"),
       body: Padding(
         padding: EdgeInsets.only(top: 10, left: 5, right: 5),
         child: getTransactionList(),
@@ -55,25 +56,6 @@ class _FragmentTransferState extends State<FragmentTransfer> {
           onPressed: () {
             Navigator.pushNamed(context, '/new_tranfer_activity');
           }),
-    );
-  }
-
-  AppBar buildAppBar() {
-    return AppBar(
-      backgroundColor: GRAY,
-      elevation: 5,
-      centerTitle: false,
-      title: Padding(
-        padding: const EdgeInsets.only(left: 10),
-        child: Text(
-          "Transactions",
-          style: TextStyle(
-            fontFamily: 'math_tapping',
-            color: YELLOW,
-            fontSize: 25,
-          ),
-        ),
-      ),
     );
   }
 

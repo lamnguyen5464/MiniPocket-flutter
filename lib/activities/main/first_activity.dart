@@ -1,6 +1,7 @@
 import 'package:MiniPocket_flutter/activities/fragments/fragment_authentication.dart';
 import 'package:MiniPocket_flutter/activities/fragments/fragment_status.dart';
 import 'package:MiniPocket_flutter/activities/fragments/fragment_transfer.dart';
+import 'package:MiniPocket_flutter/components/app_bar.dart';
 import 'package:MiniPocket_flutter/constat.dart';
 import 'package:MiniPocket_flutter/models/CurrentUser.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -43,21 +44,25 @@ class _MainActivityState extends State<MainActivity> {
       case 1:
         return FragmentStatus();
       case 2:
-        return Column(
-          children: [
-            Text(
-              "Signed in " + CurrentUser.uid,
-              style: TextStyle(
-                color: WHITE,
-                fontSize: 25,
+        return Scaffold(
+          appBar: buildAppBar("Account"),
+          backgroundColor: GRAY,
+          body: Column(
+            children: [
+              Text(
+                "Signed in " + CurrentUser.uid,
+                style: TextStyle(
+                  color: WHITE,
+                  fontSize: 25,
+                ),
               ),
-            ),
-            RaisedButton(
-                child: Text("Sign out"),
-                onPressed: () {
-                  FirebaseAuth.instance.signOut();
-                }),
-          ],
+              RaisedButton(
+                  child: Text("Sign out"),
+                  onPressed: () {
+                    FirebaseAuth.instance.signOut();
+                  }),
+            ],
+          ),
         );
       default:
         return Text("tmp");

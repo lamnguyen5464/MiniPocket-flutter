@@ -1,3 +1,4 @@
+import 'package:MiniPocket_flutter/components/app_bar.dart';
 import 'package:MiniPocket_flutter/constat.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -17,7 +18,7 @@ class _FragmentStatusState extends State<FragmentStatus> {
         .size;
     return Scaffold(
         backgroundColor: GRAY,
-        appBar: buildAppBar(),
+        appBar: buildAppBar("Current status"),
         body: Align(
           alignment: Alignment.center,
           child: FlatButton(
@@ -49,24 +50,6 @@ class _FragmentStatusState extends State<FragmentStatus> {
             ),
           ),
         )
-    );
-  }
-  AppBar buildAppBar() {
-    return AppBar(
-      backgroundColor: GRAY,
-      elevation: 5,
-      centerTitle: false,
-      title: Padding(
-        padding: const EdgeInsets.only(left: 10),
-        child: Text(
-          "Current status",
-          style: TextStyle(
-            fontFamily: 'math_tapping',
-            color: YELLOW,
-            fontSize: 25,
-          ),
-        ),
-      ),
     );
   }
 
