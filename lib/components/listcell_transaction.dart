@@ -19,12 +19,7 @@ class ListCellTransaction extends StatelessWidget {
 
   NonRepeatedDetail getFromSnap(DocumentSnapshot document) {
     NonRepeatedDetail tmp = new NonRepeatedDetail();
-    tmp.value = (document["value"] is double)
-        ? document["value"]
-        : document["value"].toDouble();
-    tmp.note = document["note"];
-    tmp.date.setFromDateCode(document["dateCode"]);
-//    print(tmp.value.toString() + " " + tmp.note + " " + tmp.date.getDateCode().toString());
+    tmp.setFromSnapshot(document);
     return tmp;
   }
 

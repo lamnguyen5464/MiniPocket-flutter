@@ -1,3 +1,4 @@
+import 'package:MiniPocket_flutter/models/transferdetails/WeeklyDetail.dart';
 import 'package:MiniPocket_flutter/viewmodels/NewTrasferViewModel.dart';
 import 'package:MiniPocket_flutter/components/custom_text_field.dart';
 import 'package:MiniPocket_flutter/components/toggle_button.dart';

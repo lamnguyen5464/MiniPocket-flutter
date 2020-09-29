@@ -29,6 +29,12 @@ class NonRepeatedDetail extends TransactionData {
     this.note = note;
   }
 
+  void setFromSnapshot(DocumentSnapshot document){
+    this.value = document["value"];
+    this.note = document["note"];
+    this.date.setFromDateCode(document["dateCode"]);
+  }
+
   @override
   String getNote() {
     return this.note;

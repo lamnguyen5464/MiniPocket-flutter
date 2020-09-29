@@ -1,5 +1,6 @@
 import 'package:MiniPocket_flutter/activities/main/first_activity.dart';
 import 'package:MiniPocket_flutter/activities/main/new_transfer.dart';
+import 'package:MiniPocket_flutter/activities/main/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'main/constat.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -21,6 +22,8 @@ class MyApp extends StatelessWidget {
       ),
       home: MainActivity(),
       routes: <String, WidgetBuilder>{
+        '/splash_activity' : (BuildContext context) => SplashScreen(),
+        '/main_activity' : (BuildContext context) => MainActivity(),
         '/new_tranfer_activity' : (BuildContext context) => NewTransferActivity(),
       },
     );
