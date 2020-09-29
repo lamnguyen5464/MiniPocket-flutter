@@ -40,33 +40,33 @@ class NonRepeatedDetail extends TransactionData {
   }
 
   @override
-  void postToFirebase() {
-    Firestore.instance
+  void postToFirebase() async{
+    await Firestore.instance
         .collection(CurrentUser.uid)
         .document(DETAIL_USER)
         .get()
-        .then((value) => {
-      if (value.data == null)
-        {
-          Firestore.instance
-              .collection(CurrentUser.uid)
-              .document(DETAIL_USER)
-              .setData({
-            'my_money': this.value
-          })
-        }
-      else
-        {
-          Firestore.instance
-              .collection(CurrentUser.uid)
-              .document(DETAIL_USER)
-              .updateData({
-            'my_money': value['my_money'] + this.value
-          })
-        }
+        .then((value) async => {
+          if (value.data == null)
+            {
+              await Firestore.instance
+                  .collection(CurrentUser.uid)
+                  .document(DETAIL_USER)
+                  .setData({
+                'my_money': this.value
+              })
+            }
+          else
+            {
+              await Firestore.instance
+                  .collection(CurrentUser.uid)
+                  .document(DETAIL_USER)
+                  .updateData({
+                'my_money': value['my_money'] + this.value
+              })
+            }
     });
 
-    Firestore.instance
+    await Firestore.instance
         .collection(CurrentUser.uid)
         .document(DETAIL_TRANSACTION)
         .collection(NONREPEATED_TAG)

@@ -1,5 +1,6 @@
 import 'package:MiniPocket_flutter/main/constat.dart';
 import 'package:MiniPocket_flutter/models/DateType.dart';
+import 'package:MiniPocket_flutter/models/transferdetails/NonRepeatedDetail.dart';
 import 'package:MiniPocket_flutter/models/transferdetails/TransactionData.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -70,17 +71,41 @@ class WeeklyDetail extends TransactionData {
   }
 
   @override
-  void postToFirebase() {
-    Firestore.instance
+  void postToFirebase() async {
+    DateType upToDate = new DateType();
+    upToDate.setFromDateCode(this.getFromDate().getDateCode());
+    await this.generateTransactions(upToDate, new DateType());
+
+    await Firestore.instance
         .collection(CurrentUser.uid)
         .document(DETAIL_TRANSACTION)
         .collection(WEEKLY_TAG)
         .add({
       'value': this.value,
       'note': this.note,
-      'fromDate': getFromDate().getDateCode(),
-      'toDate': !endDate.isEmptyDate() ? endDate.getDateCode() : 99999999,
+      'startDate': getFromDate().getDateCode(),
+      'endDate': endDate.getDateCode(),
+      'upToDate' : upToDate.getDateCode(),
     });
   }
 
+  Future<bool> generateTransactions(DateType fromDate, DateType today) async {
+    while (fromDate.getDateCode() <= today.getDateCode()) {
+      if (this.getToDate().getDateCode() < fromDate.getDateCode()) {
+        //delete
+        return false;
+      } else {
+        if (this.getFromDate().getDateCode() <= fromDate.getDateCode() && this.statusDayOfWeek[fromDate.getDayOfWeek()] == '1') {
+          //the transaction happens on fromDate
+          NonRepeatedDetail detail = new NonRepeatedDetail();
+          detail.set(this.getValue(), this.getNote());
+          detail.getNonRepeatingDate().setFromDateCode(fromDate.getDateCode());
+          await detail.postToFirebase();
+
+        }
+      }
+      fromDate.goToTheNextDay();
+    }
+    return true;
+  }
 }
