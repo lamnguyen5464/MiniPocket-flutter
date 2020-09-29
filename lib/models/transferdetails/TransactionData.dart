@@ -37,6 +37,7 @@ abstract class FactoryTransaction{
   DateType getFromDate();
   DateType getToDate();
   bool isInvalid();
+  void postToFirebase();
 
 }
 

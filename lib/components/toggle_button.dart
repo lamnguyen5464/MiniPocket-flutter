@@ -1,8 +1,8 @@
 
 import 'package:flutter/cupertino.dart';
 
-import '../constat.dart';
-import '../styles.dart';
+import '../main/constat.dart';
+import '../main/styles.dart';
 
 class CusTomToggleButton extends StatelessWidget{
 

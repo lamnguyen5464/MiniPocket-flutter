@@ -1,6 +1,10 @@
 
+import 'package:MiniPocket_flutter/main/constat.dart';
 import 'package:MiniPocket_flutter/models/DateType.dart';
 import 'package:MiniPocket_flutter/models/transferdetails/TransactionData.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../CurrentUser.dart';
 
 class NonRepeatedDetail extends TransactionData {
   DateType date;
@@ -33,6 +37,44 @@ class NonRepeatedDetail extends TransactionData {
   @override
   double getValue() {
     return this.value;
+  }
+
+  @override
+  void postToFirebase() {
+    Firestore.instance
+        .collection(CurrentUser.uid)
+        .document(DETAIL_USER)
+        .get()
+        .then((value) => {
+      if (value.data == null)
+        {
+          Firestore.instance
+              .collection(CurrentUser.uid)
+              .document(DETAIL_USER)
+              .setData({
+            'my_money': this.value
+          })
+        }
+      else
+        {
+          Firestore.instance
+              .collection(CurrentUser.uid)
+              .document(DETAIL_USER)
+              .updateData({
+            'my_money': value['my_money'] + this.value
+          })
+        }
+    });
+
+    Firestore.instance
+        .collection(CurrentUser.uid)
+        .document(DETAIL_TRANSACTION)
+        .collection(NONREPEATED_TAG)
+        .add({
+      'value': this.value,
+      'note': this.note,
+      'dateCode': this.date.getDateCode(),
+    });
   }
 
 }

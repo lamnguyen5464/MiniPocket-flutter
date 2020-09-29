@@ -1,6 +1,6 @@
 import 'package:MiniPocket_flutter/components/app_bar.dart';
 import 'package:MiniPocket_flutter/components/listcell_transaction.dart';
-import 'package:MiniPocket_flutter/constat.dart';
+import 'package:MiniPocket_flutter/main/constat.dart';
 import 'package:MiniPocket_flutter/models/CurrentUser.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';

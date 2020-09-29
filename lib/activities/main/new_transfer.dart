@@ -1,8 +1,8 @@
-import 'package:MiniPocket_flutter/activities/viewmodels/NewTrasferViewModel.dart';
+import 'package:MiniPocket_flutter/viewmodels/NewTrasferViewModel.dart';
 import 'package:MiniPocket_flutter/components/custom_text_field.dart';
 import 'package:MiniPocket_flutter/components/toggle_button.dart';
 import 'package:MiniPocket_flutter/components/toggle_button_week_day.dart';
-import 'package:MiniPocket_flutter/constat.dart';
+import 'package:MiniPocket_flutter/main/constat.dart';
 import 'package:MiniPocket_flutter/models/DateType.dart';
 import 'package:MiniPocket_flutter/models/transferdetails/NonRepeatedDetail.dart';
 import 'package:MiniPocket_flutter/models/transferdetails/TransactionData.dart';
@@ -12,7 +12,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import '../../styles.dart';
+import '../../main/styles.dart';
 
 class NewTransferActivity extends StatefulWidget {
   @override

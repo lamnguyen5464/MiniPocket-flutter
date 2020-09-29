@@ -1,7 +1,7 @@
 import 'package:MiniPocket_flutter/activities/main/first_activity.dart';
 import 'package:MiniPocket_flutter/activities/main/new_transfer.dart';
 import 'package:flutter/material.dart';
-import 'constat.dart';
+import 'main/constat.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 void main(){
   runApp(MyApp());

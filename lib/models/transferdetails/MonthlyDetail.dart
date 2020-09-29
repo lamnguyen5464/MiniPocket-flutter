@@ -58,4 +58,9 @@ class MonthlyDetail extends TransactionData {
     return (this.value == 0 || this.note == "" );
   }
 
+  @override
+  void postToFirebase() {
+    // TODO: implement postToFirebase
+  }
+
 }

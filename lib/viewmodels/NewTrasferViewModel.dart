@@ -3,7 +3,7 @@ import 'package:MiniPocket_flutter/models/transferdetails/TransactionData.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import '../../constat.dart';
+import '../main/constat.dart';
 
 class NewTransferViewModel {
   TransactionType type;
@@ -48,75 +48,13 @@ class NewTransferViewModel {
     );
   }
 
-  void postNonRepeating() {
-    Firestore.instance
-        .collection(CurrentUser.uid)
-        .document(DETAIL_USER)
-        .get()
-        .then((value) => {
-              if (value.data == null)
-                {
-                  Firestore.instance
-                      .collection(CurrentUser.uid)
-                      .document(DETAIL_USER)
-                      .setData({
-                    'my_money': (isEarningMode
-                        ? details.getValue()
-                        : -details.getValue())
-                  })
-                }
-              else
-                {
-                  Firestore.instance
-                      .collection(CurrentUser.uid)
-                      .document(DETAIL_USER)
-                      .updateData({
-                    'my_money': value['my_money'] +
-                        (isEarningMode
-                            ? details.getValue()
-                            : -details.getValue())
-                  })
-                }
-            });
-
-    Firestore.instance
-        .collection(CurrentUser.uid)
-        .document(DETAIL_TRANSACTION)
-        .collection(NONREPEATED_TAG)
-        .add({
-      'value': isEarningMode ? details.getValue() : -details.getValue(),
-      'note': details.getNote(),
-      'dateCode': details.getNonRepeatingDate().getDateCode(),
-    });
-  }
-
-  void postWeekly() {
-    Firestore.instance
-        .collection(CurrentUser.uid)
-        .document(DETAIL_TRANSACTION)
-        .collection(WEEKLY_TAG)
-        .add({
-      'value': isEarningMode ? details.getValue() : -details.getValue(),
-      'note': details.getNote(),
-      'fromDate': details.getFromDate().getDateCode(),
-      'toDate': haveEndDate ? details.getToDate().getDateCode() : 0,
-    });
-  }
-
   bool postTrasaction() {
     if (this.details.isInvalid()){
       showError();
       return false;
     }
-
-    switch (this.type) {
-      case TransactionType.non_repeating:
-        postNonRepeating();
-        break;
-      case TransactionType.weekly:
-        postWeekly();
-        break;
-    }
+    this.details.set((isEarningMode) ? this.details.getValue() : -this.details.getValue(), this.details.getNote());
+    this.details.postToFirebase();
     return true;
   }
 

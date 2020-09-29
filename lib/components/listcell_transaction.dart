@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
-import '../constat.dart';
+import '../main/constat.dart';
 
 class ListCellTransaction extends StatelessWidget {
   NonRepeatedDetail detail;

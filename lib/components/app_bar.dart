@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../constat.dart';
+import '../main/constat.dart';
 
 AppBar buildAppBar(String title) {
   return AppBar(

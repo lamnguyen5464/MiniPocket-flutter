@@ -1,5 +1,9 @@
+import 'package:MiniPocket_flutter/main/constat.dart';
 import 'package:MiniPocket_flutter/models/DateType.dart';
 import 'package:MiniPocket_flutter/models/transferdetails/TransactionData.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../CurrentUser.dart';
 
 class WeeklyDetail extends TransactionData {
   DateType startDate, endDate;
@@ -8,6 +12,7 @@ class WeeklyDetail extends TransactionData {
   WeeklyDetail() : super(){
     this.startDate = new DateType.fromDetail(DateTime.now().day, DateTime.now().month, DateTime.now().year);
     this.endDate = new DateType.fromDetail(DateTime.now().day, DateTime.now().month, DateTime.now().year);
+    endDate.clear();
     statusDayOfWeek = "00000000";
   }
 
@@ -62,6 +67,20 @@ class WeeklyDetail extends TransactionData {
   @override
   bool isInvalid() {
     return (this.value == 0 || this.note == "" || this.statusDayOfWeek == "00000000");
+  }
+
+  @override
+  void postToFirebase() {
+    Firestore.instance
+        .collection(CurrentUser.uid)
+        .document(DETAIL_TRANSACTION)
+        .collection(WEEKLY_TAG)
+        .add({
+      'value': this.value,
+      'note': this.note,
+      'fromDate': getFromDate().getDateCode(),
+      'toDate': !endDate.isEmptyDate() ? endDate.getDateCode() : 99999999,
+    });
   }
 
 }

@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:MiniPocket_flutter/constat.dart';
+import 'package:MiniPocket_flutter/main/constat.dart';
 var decorated3DBlack = BoxDecoration(
     color: GRAY,
     borderRadius: BorderRadius.circular(10),

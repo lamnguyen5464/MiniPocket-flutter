@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../styles.dart';
+import '../main/styles.dart';
 
 class CustomTextField extends StatelessWidget {
   final Widget child;
