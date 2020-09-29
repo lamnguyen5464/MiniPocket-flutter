@@ -29,9 +29,19 @@ class ListCellTransaction extends StatelessWidget {
   }
 
   void deleteItem() async {
+    Firestore.instance
+        .collection(CurrentUser.uid)
+        .document(DETAIL_USER)
+        .get()
+        .then((snapshot) => {
+          Firestore.instance.collection(CurrentUser.uid).document(DETAIL_USER).updateData({
+            'my_money' : snapshot.data["my_money"] - this.detail.getValue()
+          })
+    });
+
     await Firestore.instance
         .collection(CurrentUser.uid)
-        .document(DATA_TAG)
+        .document(DETAIL_TRANSACTION)
         .collection(NONREPEATED_TAG)
         .document(document.documentID)
         .delete();
@@ -50,7 +60,8 @@ class ListCellTransaction extends StatelessWidget {
             color: RED,
             icon: Icons.delete,
             foregroundColor: GRAY_LIGHT,
-            onTap: () => {
+            onTap: () =>
+            {
               this.deleteItem()
             },
           ),
@@ -64,8 +75,7 @@ class ListCellTransaction extends StatelessWidget {
                 BoxShadow(color: BLACK, offset: Offset(0, 1), blurRadius: 0)
               ]),
           child: InkWell(
-            onTap: () {
-            },
+            onTap: () {},
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [

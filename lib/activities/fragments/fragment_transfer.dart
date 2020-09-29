@@ -17,7 +17,7 @@ class _FragmentTransferState extends State<FragmentTransfer> {
 
   StreamBuilder<QuerySnapshot> getTransactionList() {
     return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance.collection(CurrentUser.uid).document(DATA_TAG).collection(NONREPEATED_TAG).orderBy("dateCode", descending: true).snapshots(),
+      stream: Firestore.instance.collection(CurrentUser.uid).document(DETAIL_TRANSACTION).collection(NONREPEATED_TAG).orderBy("dateCode", descending: true).snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
         switch (snapshot.connectionState){
           case ConnectionState.waiting:

@@ -50,7 +50,11 @@ class EveryNDaysDetail extends TransactionData {
   @override
   DateType getToDate(){
     return this.endDate;
+  }
 
+  @override
+  bool isInvalid() {
+    return (this.value == 0 || this.note == "" );
   }
 
 }

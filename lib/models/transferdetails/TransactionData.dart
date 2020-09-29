@@ -36,6 +36,7 @@ abstract class FactoryTransaction{
   DateType getNonRepeatingDate();
   DateType getFromDate();
   DateType getToDate();
+  bool isInvalid();
 
 }
 

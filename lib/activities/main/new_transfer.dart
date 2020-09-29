@@ -34,8 +34,8 @@ class _NewTranferState extends State<NewTransferActivity> {
   }
 
   void onClickAddButton() {
-    viewModel.postTrasaction();
-    Navigator.pop(context, true);
+    if (viewModel.postTrasaction())
+      Navigator.pop(context, true);
   }
 
   Widget getSubFragment(bool isRepeated) {
@@ -507,6 +507,7 @@ class _NewTranferState extends State<NewTransferActivity> {
   @override
   Widget build(BuildContext context) {
     screenSize = MediaQuery.of(context).size;
+    viewModel.bindContext(context);
     return Container(
       color: GRAY,
       child: SafeArea(

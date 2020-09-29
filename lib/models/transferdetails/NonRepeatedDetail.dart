@@ -14,7 +14,7 @@ class NonRepeatedDetail extends TransactionData {
     return this.date;
   }
 
-  bool isEmpty(){
+  bool isInvalid(){
     // ignore: null_aware_in_logical_operator
     return (this.value == 0 || this.note == "" );
   }

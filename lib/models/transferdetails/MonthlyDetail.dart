@@ -53,4 +53,9 @@ class MonthlyDetail extends TransactionData {
 
   }
 
+  @override
+  bool isInvalid() {
+    return (this.value == 0 || this.note == "" );
+  }
+
 }

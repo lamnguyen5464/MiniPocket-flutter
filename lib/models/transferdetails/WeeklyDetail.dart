@@ -59,4 +59,9 @@ class WeeklyDetail extends TransactionData {
     return this.statusDayOfWeek;
   }
 
+  @override
+  bool isInvalid() {
+    return (this.value == 0 || this.note == "" || this.statusDayOfWeek == "00000000");
+  }
+
 }
